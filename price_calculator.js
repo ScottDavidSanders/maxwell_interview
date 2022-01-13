@@ -24,8 +24,21 @@ const countItems = (itemString) => {
   ).map(([item, count]) => ({ item, count }));
 };
 
+const calculateCost = (items) => {
+  return items.map(({ item, count, ...rest }) => {
+    if (PRICES[item]) {
+      return { item, count, ...rest, cost: PRICES[item].price * count };
+    }
+    return { item, count, ...rest, cost: 0 };
+  });
+};
+
 readline.question("Please enter all the items purchased separated by a comma:\n", (list) => {
-  const blah = countItems(list);
-  console.log(blah);
+  const itemsCount = countItems(list);
+  console.log("countItems", itemsCount);
+
+  const itemsCostBeforeDiscount = calculateCost(itemsCount);
+  console.log("calculateCost", itemsCostBeforeDiscount);
+
   readline.close();
 });
