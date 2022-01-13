@@ -63,6 +63,26 @@ const calculateTotals = (items) => {
   return { items, total, totalSaved };
 };
 
+const formatResponse = ({ items, total, totalSaved }) => {
+  let invalidItems = [];
+  for (item of items) {
+    if (item.cost === 0) {
+      invalidItems.push(item.item);
+    }
+  }
+  const currencyTotal = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(total);
+  const currencyTotalSaved = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(totalSaved);
+
+  console.log("\nTHANK YOU FOR SHOPPING AT MAXWELL MARKET");
+  console.table(items.filter((item) => item.cost > 0));
+  console.log(`\nTotal price:`, currencyTotal);
+  console.log(`You saved ${currencyTotalSaved} today.`);
+
+  if (invalidItems.length > 0) {
+    console.log(`\nWe're sorry we didn't have the following items: ${invalidItems.join(", ")}`);
+  }
+};
+
 readline.question("Please enter all the items purchased separated by a comma:\n", (list) => {
   const itemsCount = countItems(list);
   console.log("countItems", itemsCount);
@@ -78,6 +98,9 @@ readline.question("Please enter all the items purchased separated by a comma:\n"
 
   const totals = calculateTotals(discountedPrice);
   console.log("totals", totals);
+
+  const response = formatResponse(totals);
+  console.log(response);
 
   readline.close();
 });
