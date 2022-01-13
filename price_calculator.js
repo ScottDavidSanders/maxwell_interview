@@ -83,24 +83,13 @@ const formatResponse = ({ items, total, totalSaved }) => {
   }
 };
 
+const pipe =
+  (...fns) =>
+  (arg) =>
+    fns.reduce((acc, fn) => fn(acc), arg);
+
 readline.question("Please enter all the items purchased separated by a comma:\n", (list) => {
-  const itemsCount = countItems(list);
-  console.log("countItems", itemsCount);
-
-  const itemsCostBeforeDiscount = calculateCost(itemsCount);
-  console.log("calculateCost", itemsCostBeforeDiscount);
-
-  const discount = calculateDiscount(itemsCostBeforeDiscount);
-  console.log("discount", discount);
-
-  const discountedPrice = applyDiscount(discount);
-  console.log("discountedPrice", discountedPrice);
-
-  const totals = calculateTotals(discountedPrice);
-  console.log("totals", totals);
-
-  const response = formatResponse(totals);
-  console.log(response);
+  pipe(countItems, calculateCost, calculateDiscount, applyDiscount, calculateTotals, formatResponse)(list);
 
   readline.close();
 });
