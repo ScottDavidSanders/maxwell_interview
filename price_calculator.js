@@ -43,6 +43,15 @@ const calculateDiscount = (items) => {
   });
 };
 
+const applyDiscount = (items) => {
+  return items.map((item) => {
+    if (Number(item.cost) && Number(item.discount)) {
+      item.cost = item.cost - item.discount;
+    }
+    return item;
+  });
+};
+
 readline.question("Please enter all the items purchased separated by a comma:\n", (list) => {
   const itemsCount = countItems(list);
   console.log("countItems", itemsCount);
@@ -52,6 +61,9 @@ readline.question("Please enter all the items purchased separated by a comma:\n"
 
   const discount = calculateDiscount(itemsCostBeforeDiscount);
   console.log("discount", discount);
+
+  const discountedPrice = applyDiscount(discount);
+  console.log("discountedPrice", discountedPrice);
 
   readline.close();
 });
